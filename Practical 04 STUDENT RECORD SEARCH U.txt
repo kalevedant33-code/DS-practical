@@ -1,0 +1,54 @@
+Practical 4: STUDENT RECORD SEARCH USING LINEAR SEARCH AND BINARY SEARCH
+
+students = []
+
+n = int(input("Enter number of students: "))
+
+for i in range(n):
+    print(f"\nStudent {i + 1}:")
+    roll = int(input("Roll number: "))
+    name = input("Name: ")
+    division = input("Division: ")
+    students.append({"Roll": roll, "Name": name, "Division": division})
+
+# Linear Search by name
+search_name = input("\nEnter name to search: ")
+comparisons = 0
+found = False
+
+for student in students:
+    comparisons += 1
+    if student["Name"].lower() == search_name.lower():
+        print("Record found:", student)
+        found = True
+        break
+
+if not found:
+    print("Record Not Found.")
+print("Linear Search comparisons:", comparisons)
+
+# Sort records by roll number for Binary Search
+students.sort(key=lambda student: student["Roll"])
+
+search_roll = int(input("\nEnter roll number to search: "))
+low = 0
+high = len(students) - 1
+comparisons = 0
+found = False
+
+while low <= high:
+    middle = (low + high) // 2
+    comparisons += 1
+
+    if students[middle]["Roll"] == search_roll:
+        print("Record found:", students[middle])
+        found = True
+        break
+    elif search_roll < students[middle]["Roll"]:
+        high = middle - 1
+    else:
+        low = middle + 1
+
+if not found:
+    print("Record Not Found.")
+print("Binary Search comparisons:", comparisons)

@@ -1,0 +1,104 @@
+Practical 9: COLLEGE BILLING SYSTEM: FEE CALCULATION USING INFIX TO POSTFIX
+CONVERSION AND EVALUATION
+
+import re
+
+def tokenize(formula):
+    pattern = r"[A-Za-z][A-Za-z0-9_]*|\d+(?:\.\d+)?|[()+\-*/^]"
+    tokens = re.findall(pattern, formula)
+
+    # Reject any characters that were not recognized
+    if "".join(tokens).replace(" ", "") != formula.replace(" ", ""):
+        raise ValueError("Invalid character in formula.")
+
+    return tokens
+
+
+def infix_to_postfix(tokens):
+    priority = {"+": 1, "-": 1, "*": 2, "/": 2, "^": 3}
+    operators = []
+    postfix = []
+
+    for token in tokens:
+        if token[0].isalnum():
+            postfix.append(token)
+        elif token == "(":
+            operators.append(token)
+        elif token == ")":
+            while operators and operators[-1] != "(":
+                postfix.append(operators.pop())
+            if not operators:
+                raise ValueError("Mismatched brackets.")
+            operators.pop()
+        else:
+            while operators and operators[-1] != "(" and (
+                priority[operators[-1]] > priority[token]
+                or (priority[operators[-1]] == priority[token] and token != "^")
+            ):
+                postfix.append(operators.pop())
+            operators.append(token)
+
+        print(f"Token: {token:12} Operators: {operators}  Postfix: {postfix}")
+
+    while operators:
+        if operators[-1] == "(":
+            raise ValueError("Mismatched brackets.")
+        postfix.append(operators.pop())
+
+    return postfix
+
+
+def evaluate_postfix(postfix, values):
+    stack = []
+
+    for token in postfix:
+        if token in "+-*/^":
+            if len(stack) < 2:
+                raise ValueError("Invalid formula.")
+            b = stack.pop()
+            a = stack.pop()
+
+            if token == "+":
+                result = a + b
+            elif token == "-":
+                result = a - b
+            elif token == "*":
+                result = a * b
+            elif token == "/":
+                result = a / b
+            else:
+                result = a ** b
+
+            stack.append(result)
+            action = f"{a} {token} {b} = {result}"
+        else:
+            number = float(token) if token[0].isdigit() else values[token]
+            stack.append(number)
+            action = f"Push {number}"
+
+        print(f"Token: {token:12} Action: {action:25} Stack: {stack}")
+
+    if len(stack) != 1:
+        raise ValueError("Invalid formula.")
+
+    return stack[0]
+
+
+try:
+    formula = input("Enter fee formula: ")
+    tokens = tokenize(formula)
+    postfix = infix_to_postfix(tokens)
+
+    print("\nPostfix expression:", " ".join(postfix))
+
+    names = sorted({t for t in tokens if t[0].isalpha()})
+    values = {}
+    for name in names:
+        values[name] = float(input(f"Enter value for {name}: "))
+
+    print("\nPostfix evaluation:")
+    total = evaluate_postfix(postfix, values)
+    print("\nFinal payable fees: Rs.", total)
+
+except (ValueError, ZeroDivisionError, KeyError) as error:
+    print("Error:", error)

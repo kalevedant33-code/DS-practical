@@ -1,0 +1,97 @@
+Practical 2: DAILY ATTENDANCE MANAGEMENT USING SINGLY LINKED LIST
+
+class Node:
+    def __init__(self, day, status):
+        self.day = day
+        self.status = status
+        self.next = None
+
+
+class Attendance:
+    def __init__(self):
+        self.head = None
+
+    def insert(self, day, status):
+        new_node = Node(day, status)
+
+        if self.head is None:
+            self.head = new_node
+        else:
+            current = self.head
+            while current.next:
+                current = current.next
+            current.next = new_node
+
+    def update(self, day, status):
+        current = self.head
+        while current:
+            if current.day == day:
+                current.status = status
+                print("Attendance updated.")
+                return
+            current = current.next
+        print("Day not found.")
+
+    def count(self):
+        present = absent = 0
+        current = self.head
+
+        while current:
+            if current.status == "P":
+                present += 1
+            else:
+                absent += 1
+            current = current.next
+
+        print("Present:", present)
+        print("Absent:", absent)
+
+    def display(self):
+        current = self.head
+        if current is None:
+            print("No attendance records available.")
+            return
+
+        while current:
+            print(f"Day {current.day}: {current.status}")
+            current = current.next
+
+
+attendance = Attendance()
+
+while True:
+    print("\n1. Insert attendance")
+    print("2. Update attendance")
+    print("3. Count present and absent")
+    print("4. Display attendance")
+    print("5. Exit")
+
+    choice = input("Enter choice: ")
+
+    if choice == "1":
+        day = int(input("Enter day number: "))
+        status = input("Enter status (P/A): ").upper()
+        if status in ("P", "A"):
+            attendance.insert(day, status)
+        else:
+            print("Enter P or A only.")
+
+    elif choice == "2":
+        day = int(input("Enter day number to update: "))
+        status = input("Enter new status (P/A): ").upper()
+        if status in ("P", "A"):
+            attendance.update(day, status)
+        else:
+            print("Enter P or A only.")
+
+    elif choice == "3":
+        attendance.count()
+
+    elif choice == "4":
+        attendance.display()
+
+    elif choice == "5":
+        break
+
+    else:
+        print("Invalid choice.")

@@ -1,0 +1,78 @@
+Practical 12: STUDENT SERVICE DESK USING A DEQUE
+
+MAX = 5
+deque = [None] * MAX
+front = 0
+rear = -1
+count = 0
+request_number = 101
+
+
+def display():
+    if count == 0:
+        print("Deque is empty.")
+        return
+
+    print("Requests (front to rear):")
+    i = front
+    for _ in range(count):
+        print(deque[i])
+        i = (i + 1) % MAX
+
+
+while True:
+    print("\n1. Add emergency request")
+    print("2. Add normal request")
+    print("3. Serve request")
+    print("4. Display deque")
+    print("5. Exit")
+
+    choice = input("Enter choice: ")
+
+    if choice == "1" or choice == "2":
+        if count == MAX:
+            print("Deque is full.")
+        else:
+            name = input("Enter student name: ")
+
+            if count == 0:
+                front = rear = 0
+            elif choice == "1":
+                front = (front - 1 + MAX) % MAX
+            else:
+                rear = (rear + 1) % MAX
+
+            request_type = "Emergency" if choice == "1" else "Normal"
+            deque[front if choice == "1" else rear] = (
+                request_number, name, request_type
+            )
+
+            print("Request added.")
+            request_number += 1
+            count += 1
+            display()
+
+    elif choice == "3":
+        if count == 0:
+            print("Deque is empty. No request to serve.")
+        else:
+            print("Serving:", deque[front])
+            deque[front] = None
+            count -= 1
+
+            if count == 0:
+                front = 0
+                rear = -1
+            else:
+                front = (front + 1) % MAX
+
+            display()
+
+    elif choice == "4":
+        display()
+
+    elif choice == "5":
+        break
+
+    else:
+        print("Invalid choice.")

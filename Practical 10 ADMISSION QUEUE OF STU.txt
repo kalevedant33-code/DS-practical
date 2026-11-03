@@ -1,0 +1,60 @@
+Practical 10: ADMISSION QUEUE OF STUDENTS USING A LINEAR QUEUE
+
+MAX = 5
+queue = [0] * MAX
+front = -1
+rear = -1
+
+while True:
+    print("\n1. Add student token")
+    print("2. Process next student")
+    print("3. Show front and rear tokens")
+    print("4. Display queue")
+    print("5. Exit")
+
+    choice = input("Enter choice: ")
+
+    if choice == "1":
+        if rear == MAX - 1:
+            print("Queue is full.")
+        else:
+            token = int(input("Enter token number: "))
+
+            if front == -1:
+                front = 0
+
+            rear += 1
+            queue[rear] = token
+            print("Token added.")
+
+    elif choice == "2":
+        if front == -1:
+            print("Queue is empty.")
+        else:
+            print("Processing student with token:", queue[front])
+            front += 1
+
+            if front > rear:
+                front = rear = -1
+
+    elif choice == "3":
+        if front == -1:
+            print("Queue is empty.")
+        else:
+            print("Front token:", queue[front])
+            print("Rear token:", queue[rear])
+
+    elif choice == "4":
+        if front == -1:
+            print("Queue is empty.")
+        else:
+            print("Queue:", end=" ")
+            for i in range(front, rear + 1):
+                print(queue[i], end=" ")
+            print()
+
+    elif choice == "5":
+        break
+
+    else:
+        print("Invalid choice.")

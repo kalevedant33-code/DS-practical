@@ -1,0 +1,50 @@
+Practical 5: MERIT LIST PREPARATION USING SORTING TECHNIQUES
+
+students = []
+
+n = int(input("Enter number of students: "))
+
+for i in range(n):
+    print(f"\nStudent {i + 1}:")
+    name = input("Name: ")
+    cgpa = float(input("CGPA: "))
+    students.append({"Name": name, "CGPA": cgpa})
+
+# Selection Sort: descending CGPA
+selection_list = students.copy()
+
+for i in range(n):
+    highest = i
+    for j in range(i + 1, n):
+        if selection_list[j]["CGPA"] > selection_list[highest]["CGPA"]:
+            highest = j
+    selection_list[i], selection_list[highest] = selection_list[highest], selection_list[i]
+
+print("\nMerit List using Selection Sort:")
+for rank, student in enumerate(selection_list, start=1):
+    print(rank, student["Name"], student["CGPA"])
+
+# Insertion Sort: descending CGPA
+insertion_list = students.copy()
+shifts = 0
+
+for i in range(1, n):
+    key = insertion_list[i]
+    j = i - 1
+
+    while j >= 0 and insertion_list[j]["CGPA"] < key["CGPA"]:
+        insertion_list[j + 1] = insertion_list[j]
+        shifts += 1
+        j -= 1
+
+    insertion_list[j + 1] = key
+
+print("\nMerit List using Insertion Sort:")
+for rank, student in enumerate(insertion_list, start=1):
+    print(rank, student["Name"], student["CGPA"])
+
+print("Number of shifts:", shifts)
+
+print("\nTop 5 Students:")
+for rank, student in enumerate(insertion_list[:5], start=1):
+    print(rank, student["Name"], student["CGPA"])

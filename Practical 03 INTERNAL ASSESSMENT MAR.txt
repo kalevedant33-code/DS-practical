@@ -1,0 +1,56 @@
+Practical 3: INTERNAL ASSESSMENT MARKS MANAGEMENT USING ARRAY AND SINGLY LINKED
+
+LIST
+
+class Node:
+    def __init__(self, marks):
+        self.marks = marks
+        self.next = None
+
+
+class LinkedList:
+    def __init__(self):
+        self.head = None
+
+    def insert(self, marks):
+        new_node = Node(marks)
+
+        if self.head is None:
+            self.head = new_node
+        else:
+            current = self.head
+            while current.next:
+                current = current.next
+            current.next = new_node
+
+
+n = int(input("Enter number of students: "))
+marks = []
+linked_list = LinkedList()
+
+for i in range(n):
+    score = int(input(f"Enter marks of student {i + 1}: "))
+    marks.append(score)
+    linked_list.insert(score)
+
+print("\nArray representation:")
+for index, score in enumerate(marks):
+    print(f"Index {index} -> Marks {score}")
+
+print("\nLinked list representation:")
+current = linked_list.head
+while current:
+    if current.next:
+        print(f"[{current.marks} | next] -> ", end="")
+    else:
+        print(f"[{current.marks} | None]")
+    current = current.next
+
+count = 0
+current = linked_list.head
+while current:
+    if current.marks > 80:
+        count += 1
+    current = current.next
+
+print("\nStudents scoring more than 80:", count)
